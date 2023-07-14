@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../_header') -%>
+
+    <body>
+        <%- include('../_topbar') -%>
+        <div class="container-fluid padding-block-1 text-center">
+            <h1 class="padding-block-1">User Management Panel</h1>
+            <button id="refreshUsers"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+            <table id="userTable" class="users-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Registered</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.3.0/luxon.min.js" integrity="sha512-KKbQg5o92MwtJKR9sfm/HkREzfyzNMiKPIQ7i7SZOxwEdiNCm4Svayn2DBq7MKEdrqPJUOSIpy1v6PpFlCQ0YA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script defer>
+            const userTable = document.getElementById('userTable');
+            var userTableBody = userTable.getElementsByTagName("tbody")[0];
+            const refreshUsers = document.getElementById('refreshUsers');
+
+            function appendUser(user) {
+                var row = userTableBody.insertRow(-1);
+                row.dataset.id = user._id;
+                
+                var usernameCell = row.insertCell(0);
+                var emailCell = row.insertCell(1);
+                var roleCell = row.insertCell(2);
+                var registeredCell = row.insertCell(3);
+                var actionsCell = row.insertCell(4);
+
+                usernameCell.innerHTML = user.username;
+                emailCell.innerHTML = user.email;
+
+                let currentUser = localStorage.getItem('currentUser');
+                // As long as the user is not the current user, we have all kinds of options.
+                if (currentUser !== user.username && currentUser !== user.email) {
+                    let roleSelect = document.createElement('select');
+                    roleSelect.name = "role";
+                    let roleUser = document.createElement('option');
+                    roleUser.value = "user";
+                    roleUser.innerText = "User";
+                    let roleAdmin = document.createElement('option');
+                    roleAdmin.value = "admin";
+                    roleAdmin.innerText = "Admin";
+                    roleSelect.append(roleAdmin, roleUser);
+                    roleSelect.value = user.isAdmin ? 'admin' : 'user';
+
+                    roleCell.appendChild(roleSelect);
+                    roleSelect.addEventListener('change', () => {
+                        editUser(user._id, {isAdmin: roleSelect.value === 'admin' ? true : false});
+                    });
+
+                    let deleteButton = document.createElement('i');
+                    deleteButton.classList.add('action-button', 'fa', 'fa-solid', 'fa-user-minus');
+                    deleteButton.addEventListener('click', () => {
+                        const doesAgree = confirm("Do you really wish to remove this user?");
+                        if (doesAgree) {
+                            deleteUser(user._id);
+                        }
+                    });
+                    deleteButton.title = "Remove user";
+
+                    let linksButton = document.createElement('i');
+                    linksButton.classList.add('action-button', 'fa-solid', 'fa-link');
+                    linksButton.title = "See URLs"
+                    actionsCell.append(linksButton, deleteButton);
+                } else {
+                    roleCell.innerHTML = user.isAdmin ? "Admin" : "User";
+                }
+                
+                registeredCell.innerHTML = luxon.DateTime.fromISO(user.createdAt).toRelative();
+                registeredCell.title = user.createdAt;
+
+                // let editButton = document.createElement('i');
+                // editButton.classList.add('action-button', 'fa-solid', 'fa-user-pen');
+            }
+
+            function editUser(userID, data) {
+                const url = `/admin/editUser/${userID}`;
+                fetch (url, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(res => {
+                    if (res.success) {
+                        alert("Successfully edited user.");
+                    } else {
+                        alert(res.message);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Could not edit user.");
+                })
+            }
+
+            function deleteUser(userID) {
+                const url = `/admin/deleteUser/${userID}`;
+                fetch(url, {
+                    method: "DELETE"
+                })
+                .then(response => response.json())
+                .then(res => {
+                    console.log(`[delete] ${res}`);
+                    if (res.success) {
+                        alert("User has been removed.");
+                        document.querySelector(`[data-id="${userID}"]`).remove();
+                    } else {
+                        alert("Unable to remove user.");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Internal Server Error");
+                });
+            }
+
+            let num = 0;
+            function requestUsers() {
+                const url = `/admin/fetch?type=users&skip=${num}`
+                fetch(url)
+                    .then(response => response.json())
+                    .then(res => {
+                        for (let user of res.users) {
+                            appendUser(user);
+                            num++;
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+            }
+
+            requestUsers();
+            refreshUsers.onclick = requestUsers;
+        </script>
+    </body>
+
+
+</html>

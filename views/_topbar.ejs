@@ -1,0 +1,12 @@
+<nav id="topbar" class="nav">
+    <div class="container-fluid">
+        <h1>URL Shortener</h1>
+        <ul class="nav__links">
+            <% if (locals.isAdmin) { %>
+                <li><a href="/admin/dashboard">Admin Dashboard</a></li>
+            <% } %>
+            <li><a href="/user/dashboard">Home</a></li>
+            <li><a href="/auth/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
