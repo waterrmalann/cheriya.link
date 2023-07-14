@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../_header') -%>
+
+    <body>
+        <%- include('../_topbar') -%>
+        <section class="block">
+            <h1 class="text-center">Shorten URLs</h1>
+            <p class="margin text-center">Enter an URL to get the shortened link.</p>
+            
+            <form action="/url/shorten" method="POST" id="shortenForm" name="shorten-form">
+                <div class="wide-input-split">
+                <input name="url" type="url" placeholder="https://example.com"><input class="btn btn-right-input" name="login" type="submit" value="Shorten">
+                </div>
+                <p id="outputMessage" class="text-center">Your shortened link is: <a class="short-link" href="#"></a><!--<span class="chip">copy</span>--></p>
+                <p class="text-center" id="errorMessage"></p>
+        
+            </form>
+        </section>
+
+        <section class="padding-block-1 container-fluid" id="urlCardsContainer">
+            <% for( let i = 0; i < locals.urls.length; i++ ) { %>
+                <div class="card card-url">
+                    <p><a href="https://<%= locals.hostname + '/' + locals.urls[i].shortCode %>"><%= locals.hostname + '/' + locals.urls[i].shortCode %></a></p>
+                        <div>
+                            <span class="card-url__views"><i class="fa-solid fa-eye"></i>&nbsp;<%= locals.urls[i].clicks %></span>
+                            <i class="action-button fa-solid fa-trash" data-id="<%= locals.urls[i].shortCode %>"></i>
+                            <a href="<%= locals.urls[i].url %>"><i class="fa-solid fa-link"></i></a>
+                        </div>
+                </div>
+            <% } %>
+        </section>
+
+        <script src="/js/dashboard.js"></script>
+    </body>
+</html>

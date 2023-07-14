@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('_header.ejs') -%>
+ 
+    <body>
+        <div class="container padding-block-1 center">
+            <div class="card">
+
+                <h2><%= locals.shortURL %></h2>
+                <p>will redirect you to</p>
+                <p><%= locals.longURL %>.</p>
+            </div>
+        </div>
+    </body>
+</html>

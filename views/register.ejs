@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('_header.ejs') -%>
+ 
+    <body>
+        <div class="container padding-block-1 center">
+            <div class="card">
+
+                <h2>Register</h2>
+                <p>Create an account to sign up.</p>
+    
+                <form action="/auth/register" method="POST" id="registerForm" name="register-form" class="padding-block-1">
+                     <label for="name">Name</label>
+                     <input name="name" type="text" placeholder="E.g: John Doe">
+                     <label for="username">Username</label>
+                     <input name="username" type="text" placeholder="E.g: johndoe123">
+                     <label for="email">Email</label>
+                     <input name="email" type="email" placeholder="E.g: johndoe@gmail.com">
+                     <label for="password">Password</label>
+                     <input name="password" type="password" placeholder="Enter your password.">
+                     <label for="password2">Password (Confirmation)</label>
+                     <input name="password2" type="password" placeholder="Re-enter your password.">
+                     <p class="text-center" id="errorMessage"></p>
+                     <input class="register-button" name="register" type="submit" value="Register">
+                </form>
+                <p class="text-center">Already registered? <a class="link" href="/auth/login">Login.</a></p>
+                <p class="text-center" id="successMessage"></p>
+            </div>
+        </div>
+        
+        <script src="/js/form.js"></script>
+    </body>
+
+</html>

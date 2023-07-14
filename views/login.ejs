@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('_header') -%>
+
+    <body>
+        
+        <div class="container padding-block-1 center">
+            <div class="card">
+
+                <h2>Login</h2>
+                <p>Hi, Welcome back!</p>
+    
+                <form action="/auth/login" method="POST" id="loginForm" name="login-form" class="padding-block-1">
+                     <label for="mail">Username/Email</label>
+                     <input name="username" type="text" placeholder="E.g: johndoe@gmail.com">
+                     <label for="password">Password</label>
+                     <input name="password" type="password" placeholder="Enter your password.">
+                     <input name="remember" type="checkbox">
+                     <label for="remember">Remember Me</label>
+                     <p class="text-center" id="errorMessage"></p>
+                     <input class="login-button" name="login" type="submit" value="Login">
+                </form>
+                <p class="text-center">Not yet registered yet? <a class="link" href="/auth/register">Create an account.</a></p>
+                <p class="text-center" id="successMessage"></p>
+            </div>
+        </div>
+
+        <script src="/js/form.js"></script>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const registered = urlParams.get("registered");
+            const loggedOut = urlParams.get("bye");
+            if (registered === 'true') {
+                displaySuccess("Account has been created successfully.");
+            }
+            if (loggedOut === 'true') {
+                displaySuccess("Logged out successfully.");
+            }
+        </script>
+    </body>
+
+</html>
