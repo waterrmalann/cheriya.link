@@ -5,17 +5,19 @@
     <body>
         <%- include('../_topbar') -%>
         <section class="block">
-            <h1 class="text-center">Shorten URLs</h1>
-            <p class="margin text-center">Enter an URL to get the shortened link.</p>
-            
-            <form action="/url/shorten" method="POST" id="shortenForm" name="shorten-form">
-                <div class="wide-input-split">
-                <input name="url" type="url" placeholder="https://example.com"><input class="btn btn-right-input" name="login" type="submit" value="Shorten">
-                </div>
-                <p id="outputMessage" class="text-center">Your shortened link is: <a class="short-link" href="#"></a><!--<span class="chip">copy</span>--></p>
-                <p class="text-center" id="errorMessage"></p>
-        
-            </form>
+            <h1 class="text-title text-center">Shorten URLs</h1>
+            <p class="margin text-center text-muted">Enter an URL to get a shortened link within seconds.</p>
+            <div class="container">
+                <form action="/url/shorten" method="POST" id="shortenForm" name="shorten-form">
+                    <div class="wide-input-split">
+                        <input name="url" type="url" placeholder="https://example.com"><input class="btn btn-block" name="login" type="submit" value="Shorten URL">
+                    </div>
+                    <p id="outputMessage" class="text-center">Your shortened link is: <a class="short-link" href="#"></a><!--<span class="chip">copy</span>--></p>
+                    <p class="text-center" id="errorMessage"></p>
+                    
+                </form>
+                <p class="margin text-center text-muted">You must ensure that the link you input is appropriate and not malicious.</p>
+            </div>
         </section>
 
         <section class="padding-block-1 container-fluid" id="urlCardsContainer">

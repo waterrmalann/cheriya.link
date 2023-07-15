@@ -1,5 +1,10 @@
 :root {
-    --primary-bg: #FF312E;
+    --tr-clr: #FF312E;
+    --accent-clr: #196091;
+    --accent-clr-alt: #2c96df;
+    --primary-clr: #28384a;
+    --primary-clr-alt: #97b1cf;
+    --secondary-clr: #f5f7f8;
 }
 
 *, *::before, *::after {
@@ -17,14 +22,14 @@ html, body {
     height: 100%;
     width: 100%;
     overflow-x: hidden;
-    font-family: sans-serif;
+    font-family: 'Poppins', sans-serif;
     scroll-behavior: smooth;
     /*background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1683009427513-28e163402d16?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80") no-repeat center center fixed;*/
     background-size: cover;
 }
 
 body {
-    background-color: white;
+    background-color: var(--secondary-clr);
 }
 
 a, a:visited, a:active {
@@ -64,6 +69,7 @@ a, a:visited, a:active {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+    gap: 1rem;
 }
 
 .padding-block-1 {
@@ -96,7 +102,7 @@ input[type="text"], input[type="email"], input[type="password"], input[type="url
     padding-inline: 1rem;
     margin-block: 0.7rem;
     width: 100%;
-    background-color: var(--primary-bg);
+    background-color: var(--accent-clr);
     font-size: 1rem;
     color: white;
     border-radius: 0.85rem;
@@ -104,7 +110,7 @@ input[type="text"], input[type="email"], input[type="password"], input[type="url
 }
 
 .login-button:hover {
-    background-color: darkred;
+    background-color: var(--accent-clr-alt);
     cursor: pointer;
 }
 
@@ -118,9 +124,15 @@ input[type="text"], input[type="email"], input[type="password"], input[type="url
     color: green;
     font-weight: bold;
 }
-
+.text-title {
+    font-size: 2.5rem;
+}
 .text-center {
     text-align: center;
+}
+
+.text-muted {
+    color: #b9b9b9;
 }
 
 .btn {
@@ -128,15 +140,19 @@ input[type="text"], input[type="email"], input[type="password"], input[type="url
     padding: 1rem;
     padding-inline: 1rem;
     margin-block: 0.7rem;
-    background-color: var(--primary-bg);
+    background-color: var(--accent-clr);
     font-size: 1rem;
     color: white;
 		    border-radius: 1rem;
     border: 0;
 }
 
+.cut-background {
+    background: linear-gradient(0deg, var(--primary-clr) 65%, var(--secondary-clr) 0 35%);
+}
+
 .btn:hover {
-	    background-color: darkred;
+	    background-color: var(--accent-clr-alt);
     cursor: pointer;
 }
 
@@ -144,10 +160,8 @@ input[type="text"], input[type="email"], input[type="password"], input[type="url
 	width: 100%;
 }
 
-.btn-right-input {
-	border-radius: 0.3rem;
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
+.btn-block {
+    border-radius: 0.3rem;
 }
 
 p.margin {
@@ -156,6 +170,7 @@ p.margin {
 
 .short-link {
 	font-weight: bold;
+    color: var(--accent-clr-alt);
 }
 
 .chip {
@@ -178,7 +193,7 @@ p.margin {
     padding-inline: 1rem;
     margin-block: 0.7rem;
     width: 100%;
-    background-color: var(--primary-bg);
+    background-color: var(--accent-clr);
     font-size: 1rem;
     color: white;
     border-radius: 0.85rem;
@@ -186,7 +201,7 @@ p.margin {
 }
 
 .register-button:hover {
-    background-color: darkred;
+    background-color: var(--accent-clr-alt);
     cursor: pointer;
 }
 
@@ -197,7 +212,7 @@ p.margin {
     padding: 1rem;
     padding-inline: 1rem;
     margin-block: 0.7rem;
-    background-color: var(--primary-bg);
+    background-color: var(--accent-clr);
     font-size: 1rem;
     color: white;
     border-radius: 0.85rem;
@@ -205,7 +220,7 @@ p.margin {
 }
 
 .logout-button:hover {
-    background-color: darkred;
+    background-color: var(--accent-clr-alt);
     cursor: pointer;
 }
 
@@ -241,7 +256,7 @@ blockquote footer::before {
 
 .users-table thead tr {
     user-select: none;
-    background-color: orangered;
+    background-color: var(--primary-clr);
     color: #ffffff;
     text-align: center;
 }
@@ -257,11 +272,11 @@ blockquote footer::before {
 }
 
 .users-table tbody tr:nth-of-type(odd) {
-    background-color: rgb(255, 134, 91);
+    background-color: var(--primary-clr-alt);
 }
 
 .users-table tbody tr:last-of-type {
-    border-bottom: 2px solid orangered;
+    border-bottom: 2px solid var(--primary-clr);
 }
 
 .users-table tbody tr:hover {
@@ -275,18 +290,17 @@ blockquote footer::before {
 }
 
 .block {
-	width: 100%;
-	background-color: white;
 	padding-inline: 2rem;
-	padding-block: 3rem;
+    background-color: var(--primary-clr);
+    color: white;
+	padding-block: 3.5rem;
     box-shadow: 5px 5px 5px rgba(14, 14, 14, 0.2);
-    margin-block: 1rem;
 }
 
 #topbar {
     position: sticky;
     top: 0;
-    background-color: orangered;
+    background-color: var(--primary-clr);
     color: white;
 }
 
