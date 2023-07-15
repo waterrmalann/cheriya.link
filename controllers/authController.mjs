@@ -46,7 +46,7 @@ async function handleRegistration(req, res) {
             res.send({ success: false, message: 'Invalid email' });
         } else {
             // Hash the password for better security
-            const hashedPassword = pass.hash(req.body.password);
+            const hashedPassword = await pass.hash(req.body.password);
             console.log(`✨ [registration] User registered with as '${req.body.username}' with email '${req.body.email}'`);
             User.create({ username: req.body.username, email: req.body.email, password: hashedPassword });
             res.send({ success: true, location: '/auth/login?registered=true' });

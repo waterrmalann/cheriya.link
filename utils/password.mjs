@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
 
 function hash(password) {
-    return bcrypt.hashSync(password, 10);
+    return bcrypt.hash(password, 10);
 }
 
 function compare(password, hash) {
-    return bcrypt.compareSync(password, hash);
+    return bcrypt.compare(password, hash);
 }
 
 export default {hash, compare};
