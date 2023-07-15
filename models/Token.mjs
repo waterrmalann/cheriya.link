@@ -1,5 +1,8 @@
 import { Schema, model } from "mongoose";
 
+/**
+ * Token schema definition
+ */
 const tokenSchema = new Schema({
     token: {
         type: String,
@@ -15,6 +18,9 @@ const tokenSchema = new Schema({
     }
 });
 
+/**
+ * Token model based on the token schema.
+ */
 const tokenModel = model("Token", tokenSchema);
 
 export { tokenSchema, tokenModel };

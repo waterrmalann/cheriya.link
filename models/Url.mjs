@@ -1,5 +1,8 @@
 import { Schema, model } from "mongoose";
 
+/**
+ * URL schema definition
+ */
 const urlSchema = new Schema({
     url: {
         type: String,
@@ -23,6 +26,9 @@ const urlSchema = new Schema({
     }
 });
 
+/**
+ * URL model based on the URL schema.
+ */
 const urlModel = model("URL", urlSchema);
 
 export { urlSchema, urlModel };
