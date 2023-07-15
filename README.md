@@ -1,6 +1,6 @@
 # cheriya.link
 
-**Cheriya** is an URL shortener with basic user registration and authentication that allows for shortening of any given URL. Cheriya is powered by Node.js (w/ Express) at the backend and MongoDB for the database using Mongoose.
+**Cheriya** is an URL shortener with basic user registration and authentication that allows for shortening of any given URL. Cheriya is powered by Node.js (w/ Express) at the backend and MongoDB for the database using Mongoose. The word "cheriya" means "small" in Malayalam.
 
 ## Features
 
@@ -15,7 +15,7 @@
 - [EJS](https://ejs.co/): Templating language.
 - [nanoid](https://www.npmjs.com/package/nanoid): Small, secure, and URL-friendly unique ID generator.
 - [passport](http://www.passportjs.org/): Simple and modular authentication middlware.
-- [passport-local](http://www.passportjs.org/packages/passport-local/): Passport strategy for authenticating with a username and password.
+    - [passport-local](http://www.passportjs.org/packages/passport-local/): Passport strategy for authenticating with a username and password.
 - [bcrypt](https://www.npmjs.com/package/bcrypt): A library for hashing and comparing passwords.
 
 ## 🚀 Getting Started
@@ -25,7 +25,7 @@
 1. Clone the repository.
 
 ```sh
-git clone https://github.com/waterrmalann/cheriya.git
+git clone https://github.com/waterrmalann/cheriya.link.git
 ```
 
 2. Install the dependencies.
