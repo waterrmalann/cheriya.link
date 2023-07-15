@@ -33,33 +33,32 @@ export default async (username, password, done) => {
  * @param {object} res - The response object.
  * @param {function} next - The next middleware function.
  */
-const rememberMe = (req, res, next) => {
+const rememberMe = async (req, res, next) => {
     // If the user is already authenticated or does not have a rememberMe cookie, short-circuit.
-    if (req.isAuthenticated || !res.cookies.rememberMe) return next();
+    if (req.isAuthenticated() || !req.cookies.rememberMe) return next();
 
-    const token = res.cookies.rememberMe;
-    Token.validate(token, (err, userId) => {
-        if (err) {
-            console.error(err);
-            return next();
-        }
+    const token = req.cookies.rememberMe;
+    try {
+        const userId = await Token.validate(token);
         if (userId) {
-            userModel.findById(userId, (err, user) => {
-                if (err) {
-                    console.error(err);
-                    return next();
-                }
-                if (user) {
-                    req.logIn(user, (err) => {
-                        if (err) return res.sendStatus(500);
-                        console.log(`💫 [login] '${user.username}' has been remembered.`);
-                    });
-                }
-            });
+            const user = await userModel.findById(userId);
+            if (user) {
+                req.logIn(user, (err) => {
+                    if (err) {
+                        console.error(err);
+                        return res.sendStatus(500);
+                    }
+                    console.log(`💫 [login] '${user.username}' has been remembered.`);
+                    next();
+                });
+            }
+        } else {
+            next();
         }
-    });
-
-    next();
+    } catch (err) {
+        console.error(err);
+        next();
+    }
 };
 
 /**
@@ -68,18 +67,20 @@ const rememberMe = (req, res, next) => {
  * @param {object} res - The response object.
  * @param {function} next - The next middleware function.
  */
-const forgetMe = (req, res, next) => {
+const forgetMe = async (req, res, next) => {
     if (req.user && req.cookies.rememberMe) {
-        Token.consume(req.cookies.rememberMe, (err) => {
-            if (err) {
-                console.error(err);
+        try {
+            const userId = await Token.consume(req.cookies.rememberMe);
+            if (userId === false) {
+                // Token not found or already consumed
+                return next();
             }
-            res.clearCookie('rememberMe', { path: '/' });
-            return next();
-        });
-    } else {
-        return next();
+        } catch (err) {
+            console.error(err);
+        }
+        res.clearCookie('rememberMe', { path: '/' });
     }
+    return next();
 };
 
 /**

@@ -64,31 +64,41 @@ async function handleRegistration(req, res) {
  * @param {Object} res - Express response object
  * @param {Function} next - Next middleware function
  */
-function handleLogin(req, res, next) {
-    passport.authenticate('local', (err, user, info) => {
-        if (err) return res.status(500).json({ success: false, message: 'Internal server error' });
-        if (!user) {
-            return res.status(401).json({ success: false, message: 'Invalid username/password' });
-        }
-        req.logIn(user, (err) => {
-            if (err) return res.status(500).json({ success: false, message: 'Session establishment failed' });
-
-            if (req.body.remember) {
-                const token = Token.generate();
-                Token.save(token, user.id, (err) => {
-                    if (err) return res.status(500).json({ success: false, message: "Token generation failed" });
-
-                    res.cookie('rememberMe', token, { path: '/', httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 }); // Set remember-me token in a cookie (7 days expiration)
-                    console.log(`💫 [login] '${req.body.username}' has logged in with remember me.`);
-                    return res.json({ success: true, location: '/user/dashboard?remembered=true' });
-                });
-            } else {
-                console.log(`💫 [login] '${req.body.username}' has logged in.`);
-                return res.json({ success: true, location: '/user/dashboard' });
+async function handleLogin(req, res, next) {
+    try {
+        passport.authenticate('local', async (err, user, info) => {
+            if (err) {
+                return res.status(500).json({ success: false, message: 'Internal server error' });
             }
-        });
-    })(req, res, next);
+            if (!user) {
+                return res.status(401).json({ success: false, message: 'Invalid username/password' });
+            }
+            req.logIn(user, async (err) => {
+                if (err) {
+                    return res.status(500).json({ success: false, message: 'Session establishment failed' });
+                }
+
+                if (req.body.remember) {
+                    try {
+                        const token = await Token.generate();
+                        await Token.save(token, user.id);
+                        res.cookie('rememberMe', token, { path: '/', httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+                        console.log(`💫 [login] '${req.body.username}' has logged in with remember me.`);
+                        return res.json({ success: true, location: '/user/dashboard?remembered=true' });
+                    } catch (err) {
+                        return res.status(500).json({ success: false, message: 'Token generation failed' });
+                    }
+                } else {
+                    console.log(`💫 [login] '${req.body.username}' has logged in.`);
+                    return res.json({ success: true, location: '/user/dashboard' });
+                }
+            });
+        })(req, res, next);
+    } catch (err) {
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
 }
+
 
 /**
  * Handle user logout.

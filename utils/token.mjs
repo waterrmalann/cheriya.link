@@ -4,67 +4,57 @@ import { tokenModel } from '../models/Token.mjs';
 export default class Token {
     /**
      * Generates a secure token using bcrypt.
-     * @param {function} callback - The callback function to handle the generated token.
+     * @returns {Promise<string>} A promise that resolves with the generated token.
      */
-    static generate(callback) {
-        // Generate a salt for bcrypt hashing
-        bcrypt.genSalt(10, (err, salt) => {
-            if (err) return callback(err);
-
-            // Hash the current timestamp using the generated salt
-            bcrypt.hash(Date.now().toString(), salt, (err, hash) => {
-                if (err) return callback(err);
-                // Pass the generated token to the callback
-                return callback(null, hash);
-            });
-        });
+    static async generate() {
+        try {
+            const salt = await bcrypt.genSalt(10);
+            const hash = await bcrypt.hash(Date.now().toString(), salt);
+            return hash;
+        } catch (err) {
+            throw err;
+        }
     }
 
     /**
      * Saves the token to the database.
      * @param {string} token - The token to be saved.
      * @param {string} userId - The associated user ID.
-     * @param {function} callback - The callback function to handle the result.
+     * @returns {Promise<void>} A promise that resolves when the token is saved.
      */
-    static save(token, userId, callback) {
-        // Create a new token document in the database
-        tokenModel.create({ token, createdFor: userId }, (err) => {
-            if (err) return callback(err);
-
-            // Pass any potential error to the callback
-            return callback(null);
-        });
+    static async save(token, userId) {
+        try {
+            await tokenModel.create({ token, createdFor: userId });
+        } catch (err) {
+            throw err;
+        }
     }
 
     /**
      * Consumes and deletes the token from the database.
      * @param {string} token - The token to be consumed.
-     * @param {function} callback - The callback function to handle the result.
+     * @returns {Promise<string|boolean>} A promise that resolves with the associated user ID if the token is consumed successfully, or false if the token is not found.
      */
-    static consume(token, callback) {
-        // Find and delete the token document from the database
-        tokenModel.findOneAndDelete({ token }, (err, tokenData) => {
-            if (err) return callback(err);
-            if (!tokenData) return callback(null, false);
-
-            // Pass the associated user ID to the callback if the token is found
-            return callback(null, tokenData.userId);
-        });
+    static async consume(token) {
+        try {
+            const tokenData = await tokenModel.findOneAndDelete({ token });
+            return tokenData ? tokenData.userId : false;
+        } catch (err) {
+            throw err;
+        }
     }
 
     /**
      * Validates the token against the database.
      * @param {string} token - The token to be validated.
-     * @param {function} callback - The callback function to handle the result.
+     * @returns {Promise<string|boolean>} A promise that resolves with the associated user ID if the token is valid, or false if the token is not found.
      */
-    static validate(token, callback) {
-        // Find and retrieve the token document from the database.
-        tokenModel.findOne({ token }, (err, tokenData) => {
-            if (err) return callback(err);
-            if (!tokenData) return callback(null, false);
-
-            // Pass the associated user ID to the callback if the token is found
-            return callback(null, tokenData.userId);
-        })
+    static async validate(token) {
+        try {
+            const tokenData = await tokenModel.findOne({ token });
+            return tokenData ? tokenData.createdFor : false;
+        } catch (err) {
+            throw err;
+        }
     }
 }
