@@ -1,4 +1,4 @@
-import { urlModel as URL } from '../models/Url.mjs';
+import { urlModel as sURL } from '../models/Url.mjs';
 
 /**
  * Render the dashboard view.
@@ -14,10 +14,10 @@ async function displayDashboard(req, res) {
 
     try {
         // Find URLs created by the current user and populate the renderData object
-        const urls = await URL.find({ createdBy: req.session.passport.user.id });
+        const urls = await sURL.find({ createdBy: req.session.passport.user.id });
         renderData.urls = urls.reverse(); // Reverse the order of URLs to display the most recent ones first
     } catch (err) {
-        console.error(err);
+        console.error('⚠️ [error] Controllers/User:', err);
     }
 
     res.render('user/dashboard', renderData); // Render the dashboard view with the provided data

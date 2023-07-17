@@ -50,7 +50,7 @@ async function handleURLDeletion(req, res) {
         await User.updateOne({ _id: req.session.passport.user.id }, { $pull: { urls: shortCode } });
         res.status(200).json({ success: true, message: 'URL was deleted successfully' });
     } catch (err) {
-        console.log(err);
+        console.error('⚠️ [error] Controllers/URL (URL Deletion):', err);
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 }
@@ -73,6 +73,7 @@ async function displayURLPreview(req, res) {
 
         return res.render('preview', { title: 'Preview URL', shortURL: `/${doc.shortCode}`, longURL: doc.url });
     } catch (err) {
+        console.error('⚠️ [error] Controllers/URL (URL Preview):', err);
         res.redirect('/');
     }
 }
@@ -99,7 +100,7 @@ export async function redirectURL(req, res) {
         await doc.save();
         return res.redirect(doc.url);
     } catch (err) {
-        console.error(err);
+        console.error('⚠️ [error] Controllers/URL (Redirect):', err);
         res.redirect('/');
     }
 }

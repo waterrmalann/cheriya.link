@@ -37,23 +37,23 @@ async function handleRegistration(req, res) {
 
         if (await getUserByEmail(req.body.email) || await getUserByUsername(req.body.username)) {
             // Username or email already taken
-            res.send({ success: false, message: 'Email/username not available' });
+            res.status(401).json({ success: false, message: 'Email/username not available' });
         } else if (!usernameValidation) {
             // If the username failed validation
-            res.send({ success: false, message: 'Invalid username' });
+            res.status(401).json({ success: false, message: 'Invalid username' });
         } else if (!emailValidation) {
             // If the email failed validation
-            res.send({ success: false, message: 'Invalid email' });
+            res.status(401).json({ success: false, message: 'Invalid email' });
         } else {
             // Hash the password for better security
             const hashedPassword = await pass.hash(req.body.password);
             console.log(`✨ [registration] User registered with as '${req.body.username}' with email '${req.body.email}'`);
-            User.create({ username: req.body.username, email: req.body.email, password: hashedPassword });
-            res.send({ success: true, location: '/auth/login?registered=true' });
+            await User.create({ username: req.body.username, email: req.body.email, password: hashedPassword });
+            res.json({ success: true, location: '/auth/login?registered=true' });
         }
-    } catch (error) {
-        console.error('Error:', error);
-        res.send({ success: false, message: 'An error occurred during sign-up.' });
+    } catch (err) {
+        console.error('⚠️ [error] Controllers/Auth (Signup):', err);
+        res.status(500).json({ success: false, message: 'An error occurred during sign-up.' });
     }
 }
 
@@ -73,6 +73,7 @@ async function handleLogin(req, res, next) {
             if (!user) {
                 return res.status(401).json({ success: false, message: 'Invalid username/password' });
             }
+
             req.logIn(user, async (err) => {
                 if (err) {
                     return res.status(500).json({ success: false, message: 'Session establishment failed' });
@@ -95,7 +96,8 @@ async function handleLogin(req, res, next) {
             });
         })(req, res, next);
     } catch (err) {
-        return res.status(500).json({ success: false, message: 'Internal server error' });
+        console.error('⚠️ [error] Controllers/Auth (Login):', err);
+        return res.status(500).json({ success: false, message: 'An error occurred during sign-in.' });
     }
 }
 

@@ -22,7 +22,7 @@ async function fetchUserdata(req, res) {
         const users = await User.find({}, { username: true, email: true, isAdmin: true, createdAt: true }).skip(skip).limit(10);
         return res.json({ users });
     } catch (err) {
-        console.error(err);
+        console.error('⚠️ [error] Controllers/Admin (User Fetch):', err);
         return res.json({ users: [] });
     }
 }
@@ -40,7 +40,7 @@ async function handleUserRemoval(req, res) {
         await User.deleteOne({ _id: userId });
         res.status(200).json({ success: true, message: 'User was removed successfully' });
     } catch (err) {
-        console.error(err);
+        console.error('⚠️ [error] Controllers/Admin (User Removal):', err);
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 }
@@ -59,7 +59,7 @@ async function handleUserEdit(req, res) {
         await User.findByIdAndUpdate(userId, data);
         res.status(200).json({ success: true, message: 'User was edited successfully' });
     } catch (err) {
-        console.error(err);
+        console.error('⚠️ [error] Controllers/Admin (User Edit):', err);
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 }
