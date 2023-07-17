@@ -91,7 +91,8 @@ The project follows a Model-View-Controller (MVC) architecture, the folder struc
 │   │   └── style.css
 │   └── js
 │       ├── dashboard.js
-│       └── form.js
+│       ├── login.js
+│       └── register.js
 ├── package.json
 ├── package-lock.json
 ├── README.md

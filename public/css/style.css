@@ -187,6 +187,11 @@ p.margin {
 	background-color: darkgray;
 }
 
+#passwordError, #usernameError, #emailError {
+    color: red;
+    font-size: .8rem;
+}
+
 .register-button {
     display: block;
     padding: 1rem;

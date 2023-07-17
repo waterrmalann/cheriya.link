@@ -11,11 +11,11 @@
                 <p>Hi, Welcome back!</p>
     
                 <form action="/auth/login" method="POST" id="loginForm" name="login-form" class="padding-block-1">
-                     <label for="mail">Username/Email</label>
-                     <input name="username" type="text" placeholder="E.g: johndoe@gmail.com">
+                     <label for="username">Username/Email</label>
+                     <input name="username" id="username" type="text" placeholder="E.g: johndoe@gmail.com">
                      <label for="password">Password</label>
-                     <input name="password" type="password" placeholder="Enter your password.">
-                     <input name="remember" type="checkbox">
+                     <input name="password" id="password" type="password" placeholder="Enter your password.">
+                     <input name="remember" id="remember" type="checkbox">
                      <label for="remember">Remember Me</label>
                      <p class="text-center" id="errorMessage"></p>
                      <input class="login-button" name="login" type="submit" value="Login">
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <script src="/js/form.js"></script>
+        <script src="/js/login.js"></script>
         <script>
             const urlParams = new URLSearchParams(window.location.search);
             const registered = urlParams.get("registered");
