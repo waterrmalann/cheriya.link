@@ -2,6 +2,8 @@
 
 **Cheriya** is an URL shortener with basic user registration and authentication that allows for shortening of any given URL. Cheriya is powered by Node.js (w/ Express) at the backend and MongoDB for the database using Mongoose. The word "cheriya" means "small" in Malayalam.
 
+![](screenshot.png)
+
 ## Features
 
 - User registration and login.
